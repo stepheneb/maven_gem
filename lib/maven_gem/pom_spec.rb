@@ -6,10 +6,12 @@ module MavenGem
     extend MavenGem::XmlUtils
 
     def self.build(location)
-      pom_doc = MavenGem::PomFetcher.fetch(location)
-      pom = MavenGem::PomSpec.parse_pom(pom_doc)
-      spec = MavenGem::PomSpec.generate_spec(pom)
-      MavenGem::PomSpec.create_gem(spec, pom)
+      options = { :verbose => true }
+      pom_doc = MavenGem::PomFetcher.fetch(location, options)
+      pom = MavenGem::PomSpec.parse_pom(pom_doc, options)
+      spec = MavenGem::PomSpec.generate_spec(pom, options)
+      gem_dir = MavenGem::PomSpec.create_gem(spec, pom, options)
+      [gem_dir, pom.gem_file]
     end
 
     # Unless the maven version string is a valid Gem version string create a substitute

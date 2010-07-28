@@ -10,18 +10,18 @@ require 'yaml'
 
 module MavenGem
   def self.install(group, artifact = nil, version = nil)
-    gem = build(group, artifact, version)
-    Gem::GemRunner.new.run(["install", gem])
+    gem_dir, gem_file = build(group, artifact, version)
+    Gem::GemRunner.new.run(["install", gem_file])
   ensure
-    FileUtils.rm_f(gem) if gem
+    FileUtils.rm_f(gem_dir) if gem_dir
   end
 
   def self.build(group, artifact = nil, version = nil)
-    gem = if artifact
-      url = MavenGem::PomSpec.to_maven_url(group, artifact, version)
-      MavenGem::PomSpec.build(url)
+    if artifact
+      url = MavenGem::PomSpec.to_maven_url(group, artifact, version) 
     else
-      MavenGem::PomSpec.build(group)
+      url = group
     end
+    MavenGem::PomSpec.build(url)
   end
 end
