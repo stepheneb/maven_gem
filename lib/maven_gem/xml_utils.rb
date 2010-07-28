@@ -7,7 +7,7 @@ module MavenGem
       first = REXML::XPath.first(element, node) and first.text
     end
 
-    def xpath_dependencies(element)
+    def xpath_dependencies(element, options={})
       deps = REXML::XPath.first(element, '/project/dependencies')
       pom_dependencies = []
 
@@ -18,6 +18,10 @@ module MavenGem
           dep_group = xpath_text(dep, 'groupId')
           dep_artifact = xpath_text(dep, 'artifactId')
           dep_version = xpath_text(dep, 'version')
+          
+          if options[:verbose]
+            puts "pom dependency (group, artifact version): #{dep_group} #{dep_artifact} #{dep_version}" 
+          end
 
           # TODO: Parse maven version number modifiers, i.e: [1.5,)
           pom_dependencies << if dep_version

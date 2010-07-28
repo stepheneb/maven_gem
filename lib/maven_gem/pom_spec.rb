@@ -71,7 +71,7 @@ module MavenGem
       pom.version = maven_to_gem_version(pom.maven_version)
       pom.description = xpath_text(document, '/project/description')
       pom.url = xpath_text(document, '/project/url')
-      pom.dependencies = xpath_dependencies(document)
+      pom.dependencies = xpath_dependencies(document, options)
       pom.authors = xpath_authors(document)
 
       pom.name = maven_to_gem_name(pom.group, pom.artifact)
